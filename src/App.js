@@ -241,7 +241,10 @@ function App() {
     // -------------------------------
 
     // 5. ---------use Effect-----------
-
+    <div style={{padding: 32}}>
+      <button >Toggle</button><br />
+      <Content />
+    </div>
    // -------------------------------
 
    // 6. ---------use Effect with dependencies-----------
