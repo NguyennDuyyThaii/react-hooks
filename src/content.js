@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 
 // 1. Update DOM
 // 2. Call API
@@ -37,6 +37,20 @@ const lessons = [
     name: 'PHP la gi'
   }
 ]
+
+// useEffect
+// 1. Cap nhap lai state 
+// 2. Cap nhap DOM (mutated)
+// 3. Render lai UI
+// 4. Goi cleanup neu deps thay doi
+// 5. Goi useEffect callback
+
+// useLayoutEffect
+// 1. Cap nhap lai state 
+// 2. Cap nhap DOM (mutated)
+// 3. Goi clearnup neu deps thay doi (sync)
+// 4. Goi useLayoutEffect callback (sync)
+// 5. Render lai UI
 function Content() {
 //   const [title, setTitle] = useState("");
 //   const [posts, setPosts] = useState([]);
@@ -97,20 +111,32 @@ function Content() {
 
     // useEffect with fake chat app
 
-    const [lessonId, setLessonId] = useState(1)
+    // const [lessonId, setLessonId] = useState(1)
 
-    useEffect(() => {
-      const handleComment = ({detail}) => {
-        console.log(detail)
-      }
-      window.addEventListener(`lession-${lessonId}`, handleComment)
+    // useEffect(() => {
+    //   const handleComment = ({detail}) => {
+    //     console.log(detail)
+    //   }
+    //   window.addEventListener(`lession-${lessonId}`, handleComment)
 
-      return () => {
-        window.removeEventListener(`lession-${lessonId}`, handleComment)
-      }
+    //   return () => {
+    //     window.removeEventListener(`lession-${lessonId}`, handleComment)
+    //   }
 
-    }, [lessonId])
-    } 
+    // }, [lessonId])
+
+    // useLayoutEffect
+
+    // const [count, setCount] = useState(0)
+
+    // useLayoutEffect(() => {
+    //   if(count > 3)
+    //   setCount(0)
+    // }, [count])
+
+    // const handleCount = () => {
+    //   setCount(count + 1)
+    // }
   return (
     // <h1>Mount and UnMount</h1>
     <div>
@@ -151,7 +177,7 @@ Go to the top
 
       {/* useEffect with fake chat App */}
 
-      <ul>
+      {/* <ul>
         {lessons.map(lesson => (
           <li
           key = {lesson.id}
@@ -161,9 +187,11 @@ Go to the top
             {lesson.name}
           </li>
         ))}
-      </ul>
+      </ul> */}
     </div>
   );
+
+    }
 
 
 export default Content;
