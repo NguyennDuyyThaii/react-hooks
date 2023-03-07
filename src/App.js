@@ -1,5 +1,5 @@
-import { useState } from "react";
-import Content from './content'
+import { useState, useRef, useEffect, memo, useCallback } from "react";
+import Content2 from './Content2'
 
 // const order = [100,200,300
 // ]
@@ -142,14 +142,56 @@ function App() {
    // -------------------------------
 
   // 12. ---------useRef-----------
+  // const [count, setCount] = useState(50)
+  
+  // const timerId = useRef()
+  // const prevCount = useRef()
+  // const h1Ref = useRef()
 
+  // useEffect(() => {
+  //   prevCount.current = count
+  // }, [count])
+
+  // useEffect(() => {
+  //   const rect = h1Ref.current.getBoundingClientRect()
+
+  //   console.log(rect)
+  // })
+
+  // const handleStart  = () => {
+  //   timerId.current = setInterval(() => {
+  //     setCount(prev => prev - 1)
+  //   }, 1000)
+  // }
+
+  // const handleStop = () => {
+  //   clearInterval(timerId.current)
+  // }
+
+  // console.log(count, prevCount.current)
    // -------------------------------
 
-   // 13. ---------React.Memo-----------
+   // 13. ---------React.Memo () HOC -----------
+
+   // memo() => higher order Component (HOC)
+   // useCallback()
+
+  //  const [count, setCount] = useState(0)
+
+  //  const increase = () => {
+  //   setCount(count + 1)
+  //  }
 
    // -------------------------------
 
    // 14. ---------useCallback-----------
+
+   const [count, setCount] = useState(0)
+
+   const increase = useCallback(() => {
+    setCount(prev => prev + 1)
+   }, [])
+
 
    // -------------------------------
 
@@ -201,7 +243,12 @@ function App() {
     // two-way binding
     // <div style={{padding: 32}}>
     //   {
-    //     courses.map(item => (                                  
+    //     courses.map(i
+    //   }
+    //   {/* <input name='name' value={name} onChange={e => setName(e.target.value)}/>
+    //   <input name='email' value={email} onChange={e => setEmail(e.target.value)}/> */}
+    //   {/* <button onClick={handleSubmit}>Register</button> */}
+    // </div>tem => (                                  
     //       <div key={item.id}>
     //         <input checked={checked.includes(item.id) }
     //         onChange={() => handleCheck(item.id)}
@@ -209,11 +256,6 @@ function App() {
     //         {item.name}
     //       </div>
     //     ))
-    //   }
-    //   {/* <input name='name' value={name} onChange={e => setName(e.target.value)}/>
-    //   <input name='email' value={email} onChange={e => setEmail(e.target.value)}/> */}
-    //   {/* <button onClick={handleSubmit}>Register</button> */}
-    // </div>
     // -------------------------------
 
     // 3. ---------Todo List with useState-----------
@@ -241,10 +283,10 @@ function App() {
     // -------------------------------
 
     // 5. ---------use Effect-----------
-    <div style={{padding: 32}}>
-      <button >Toggle</button><br />
-      <Content />
-    </div>
+    // <div style={{padding: 32}}>
+    //   <button >Toggle</button><br />
+    //   <Content />
+    // </div>
    // -------------------------------
 
    // 6. ---------use Effect with dependencies-----------
@@ -272,15 +314,27 @@ function App() {
    // -------------------------------
 
     // 12. ---------useRef-----------
-
+    // <div style={{padding: 29}}>
+    //   <h1 ref={h1Ref}>{count}</h1>
+    //   <button onClick = {handleStart}>Start</button>
+    //   <button onClick = {handleStop}>Stop</button>
+    // </div>
    // -------------------------------
 
-    // 13. ---------React.Memo-----------
-
+    // 13. ---------React.Memo HOC-----------
+    // <div style = {{padding: '10px 32px'}}>
+    //   <Content2 />
+    //   <h1>{count}</h1>
+    //   <button onClick={increase}>Click me !</button>
+    // </div>
    // -------------------------------
 
     // 14. ---------useCallback-----------
-
+    <div style = {{padding: '10px 32px'}}>
+      <Content2 OnIncrease = {increase}/>
+      <h1>{count}</h1>
+ 
+    </div>
    // -------------------------------
 
   // 15. ---------useMemo-----------
