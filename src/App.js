@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, memo, useCallback, useMemo } from "react";
+import { useState, useRef, useEffect, memo, useCallback, useMemo, useReducer } from "react";
 import Content2 from './Content2'
 
 // const order = [100,200,300
@@ -197,35 +197,98 @@ function App() {
 
     // 15. ---------useMemo() hook-----------
     // usememo tranh thuc hien mot so chuc nang khong can thiet
-    const [name,setName] = useState('')
-    const [price, setPrice] = useState('')
-    const [product, setProduct] = useState([])
 
-    const nameRef = useRef()
+    // const [name,setName] = useState('')
+    // const [price, setPrice] = useState('')
+    // const [product, setProduct] = useState([])
 
-    const handleSubmit = () => {
-      setProduct([...product, {
-        name,
-        price: parseInt(price)
-      }])
+    // const nameRef = useRef()
 
-      setName('')
-      setPrice('')
+    // const handleSubmit = () => {
+    //   setProduct([...product, {
+    //     name,
+    //     price: parseInt(price)
+    //   }])
 
-      nameRef.current.focus()
-    }
+    //   setName('')
+    //   setPrice('')
 
-    const total = useMemo(() => {
-      return product.reduce((a,b) => a + b.price, 0)
-    }, [product])
+    //   nameRef.current.focus()
+    // }
+
+    // const total = useMemo(() => {
+    //   return product.reduce((a,b) => a + b.price, 0)
+    // }, [product])
+
    // -------------------------------
 
     // 16. ---------useReducer-----------
+    // const initState = 0
+    // const UP_ACTION = 'up'
+    // const DOWN_ACTION = 'down'
 
+    // const reducer = (state, action) => {
+    //   switch(action){
+    //     case UP_ACTION: 
+    //       return state + 1
+    //     case DOWN_ACTION:
+    //       return state - 1
+    //     default: 
+    //     throw new Error('Invalid action')
+    //   }
+    // }
+    // const [count, dispatch] = useReducer(reducer, initState)
    // -------------------------------
 
     // 17. ---------Todo List with useReducer-----------
 
+    const initState = {
+      job: '',
+      jobs: []
+    }
+
+    const setJob = payload => {
+      return {type: SET_JOB, payload}
+    }
+
+    const addJob = payload => {
+      return {type: ADD_JOB, payload}
+    }
+
+    const deleteJob = payload => {
+      return {type: DELETE_JOB, payload}
+    }
+    const SET_JOB = 'set_job'
+    const ADD_JOB = 'add_job'
+    const DELETE_JOB = 'delete_job'
+
+    const reducer = (state, action) => {
+      switch(action.type){
+        case SET_JOB:
+          return {...state, job: action.payload}
+        case ADD_JOB:
+          return {...state, jobs: [...state.jobs, action.payload]}
+        case DELETE_JOB:
+          const newJobs = [...state.jobs]
+          newJobs.splice(action.payload, 1)
+
+          return {state, jobs: newJobs}
+        default:
+          throw new Error('Invalid action.')
+      }
+    }
+
+    const [state, dispatch] = useReducer(reducer, initState)
+
+    const {job, jobs} = state
+    const inputRef = useRef()
+
+    const handleSubmit = () => {
+      dispatch(addJob(job))
+      dispatch(setJob(''))
+
+      inputRef.current.focus()
+    }
    // -------------------------------
 
    // 18. ---------useReducer recap-----------
@@ -360,36 +423,57 @@ function App() {
 
   // 15. ---------useMemo hook()-----------
   
-   <div style={{padding: '10px 32px'}}>
-    <input 
-    ref={nameRef}
-      value = {name}
-      placeholder= "Enter name..."
-      onChange={e => setName(e.target.value)}
-    /><br />
-       <input 
-      value = {price}
-      placeholder= "Enter price..."
-      onChange={e => setPrice(e.target.value)}
-    /><br />
-    <button onClick={handleSubmit}>Add</button>
-    <br/>
-    Total: {total}
-    <ul>
-      {product.map((pro, index) => (
-        <li key={index}>{pro.name} - {pro.price}</li>
-      ))}
-    </ul>
-   </div>
+  //  <div style={{padding: '10px 32px'}}>
+  //   <input 
+  //   ref={nameRef}
+  //     value = {name}
+  //     placeholder= "Enter name..."
+  //     onChange={e => setName(e.target.value)}
+  //   /><br />
+  //      <input 
+  //     value = {price}
+  //     placeholder= "Enter price..."
+  //     onChange={e => setPrice(e.target.value)}
+  //   /><br />
+  //   <button onClick={handleSubmit}>Add</button>
+  //   <br/>
+  //   Total: {total}
+  //   <ul>
+  //     {product.map((pro, index) => (
+  //       <li key={index}>{pro.name} - {pro.price}</li>
+  //     ))}
+  //   </ul>
+  //  </div>
 
    // -------------------------------
 
     // 16. ---------useReducer-----------
 
+    // <div style={{padding: '0 20px'}}>
+    //   <h1>{count}</h1>
+    //   <button onClick={() => dispatch(DOWN_ACTION)}>Down</button>
+    //   <button onClick={() => dispatch(UP_ACTION)}>Up</button>
+    // </div>
    // -------------------------------
 
    // 17. ---------Todo List with useReducer-----------
+    <div style={{padding: '0 20px'}}>
+      <h3>Todo</h3>
+      <input
+      ref={inputRef}
+       value = {job}
+       onChange = {e => {
+        dispatch(setJob(e.target.value))
+       }}
+       placeholder="Enter todo"/>
 
+      <button onClick={handleSubmit}>Add</button>
+      <ul>
+        {jobs.map((job, index) => (
+          <li key={index}>{job} <span onClick={() => dispatch(deleteJob(index))}>&times;</span></li>
+        ))}
+      </ul>
+    </div>
    // -------------------------------
 
    // 18. ---------useReducer recap-----------
