@@ -1,8 +1,13 @@
-import { useState, useRef, useEffect, memo, useCallback, useMemo, useReducer } from "react";
+import { useState, useRef, useEffect, memo, useCallback, useMemo, useReducer, createContext, useContext } from "react";
 import Content2 from './Content2'
+import Theme1 from "./theme1";
+import './App.css'
+import {ThemeContext, ThemeProvider} from './ThemeContext'
 
+import { useStore, actions } from "./store";
 // const order = [100,200,300
 // ]
+
 function App() {
   // 1. ---------useState-----------
   // const total = order.reduce((a,b) => a+b)
@@ -242,65 +247,72 @@ function App() {
 
     // 17. ---------Todo List with useReducer-----------
 
-    const initState = {
-      job: '',
-      jobs: []
-    }
+    // const initState = {
+    //   job: '',
+    //   jobs: []
+    // }
 
-    const setJob = payload => {
-      return {type: SET_JOB, payload}
-    }
+    // const setJob = payload => {
+    //   return {type: SET_JOB, payload}
+    // }
 
-    const addJob = payload => {
-      return {type: ADD_JOB, payload}
-    }
+    // const addJob = payload => {
+    //   return {type: ADD_JOB, payload}
+    // }
 
-    const deleteJob = payload => {
-      return {type: DELETE_JOB, payload}
-    }
-    const SET_JOB = 'set_job'
-    const ADD_JOB = 'add_job'
-    const DELETE_JOB = 'delete_job'
+    // const deleteJob = payload => {
+    //   return {type: DELETE_JOB, payload}
+    // }
+    // const SET_JOB = 'set_job'
+    // const ADD_JOB = 'add_job'
+    // const DELETE_JOB = 'delete_job'
 
-    const reducer = (state, action) => {
-      switch(action.type){
-        case SET_JOB:
-          return {...state, job: action.payload}
-        case ADD_JOB:
-          return {...state, jobs: [...state.jobs, action.payload]}
-        case DELETE_JOB:
-          const newJobs = [...state.jobs]
-          newJobs.splice(action.payload, 1)
+    // const reducer = (state, action) => {
+    //   switch(action.type){
+    //     case SET_JOB:
+    //       return {...state, job: action.payload}
+    //     case ADD_JOB:
+    //       return {...state, jobs: [...state.jobs, action.payload]}
+    //     case DELETE_JOB:
+    //       const newJobs = [...state.jobs]
+    //       newJobs.splice(action.payload, 1)
 
-          return {state, jobs: newJobs}
-        default:
-          throw new Error('Invalid action.')
-      }
-    }
+    //       return {state, jobs: newJobs}
+    //     default:
+    //       throw new Error('Invalid action.')
+    //   }
+    // }
 
-    const [state, dispatch] = useReducer(reducer, initState)
+    // const [state, dispatch] = useReducer(reducer, initState)
 
-    const {job, jobs} = state
-    const inputRef = useRef()
+    // const {job, jobs} = state
+    // const inputRef = useRef()
 
-    const handleSubmit = () => {
-      dispatch(addJob(job))
-      dispatch(setJob(''))
+    // const handleSubmit = () => {
+    //   dispatch(addJob(job))
+    //   dispatch(setJob(''))
 
-      inputRef.current.focus()
-    }
+    //   inputRef.current.focus()
+    // }
    // -------------------------------
 
    // 18. ---------useReducer recap-----------
-
+    // break function in private file
    // -------------------------------
 
     // 19. ---------React context & useContext-----------
+    // const context = useContext(ThemeContext)
 
    // -------------------------------
 
    // 20. ---------Global state with Context + useReducer-----------
 
+   const [state, dispatch] = useStore()
+   const {todos, todoInput} = state
+
+   const handleAdd = () => {
+      dispatch(actions.addTodoInput(todoInput))
+   }
    // -------------------------------
 
    // 21. ---------useImperativeHandle-----------
@@ -457,35 +469,55 @@ function App() {
    // -------------------------------
 
    // 17. ---------Todo List with useReducer-----------
-    <div style={{padding: '0 20px'}}>
-      <h3>Todo</h3>
-      <input
-      ref={inputRef}
-       value = {job}
-       onChange = {e => {
-        dispatch(setJob(e.target.value))
-       }}
-       placeholder="Enter todo"/>
+    // <div style={{padding: '0 20px'}}>
+    //   <h3>Todo</h3>
+    //   <input
+    //   ref={inputRef}
+    //    value = {job}
+    //    onChange = {e => {
+    //     dispatch(setJob(e.target.value))
+    //    }}
+    //    placeholder="Enter todo"/>
 
-      <button onClick={handleSubmit}>Add</button>
-      <ul>
-        {jobs.map((job, index) => (
-          <li key={index}>{job} <span onClick={() => dispatch(deleteJob(index))}>&times;</span></li>
-        ))}
-      </ul>
-    </div>
+    //   <button onClick={handleSubmit}>Add</button>
+    //   <ul>
+    //     {jobs.map((job, index) => (
+    //       <li key={index}>{job} <span onClick={() => dispatch(deleteJob(index))}>&times;</span></li>
+    //     ))}
+    //   </ul>
+    // </div>
    // -------------------------------
 
    // 18. ---------useReducer recap-----------
-
+    // done
    // -------------------------------
 
    // 19. ---------React context & useContext-----------
+ 
+    // <div style={{padding: '20px'}}>
+    //   <button onClick={context.toggleTheme}>Toggle theme</button>
+    //   <Theme1/>
+    // </div>
+
 
    // -------------------------------
 
    // 20. ---------Global state with Context + useReducer-----------
+    <div>
+      <input 
+        value={todoInput}
+        placeholder="Enter todo..."
+        onChange={e => {
+          dispatch(actions.setTodoInput(e.target.value))
+        }}
+      />
 
+      <button onClick={handleAdd}>Add</button>
+
+      {todos.map((todo, key) => (
+        <li key={key}>{todo}</li>
+      ))}
+    </div>
    // -------------------------------
 
     // 21. ---------useImperativeHandle-----------
